@@ -1,6 +1,6 @@
 #include <iostream>
 
-// A comment I hope causes a merge conflict.
+// A comment I hope causes a merge conflict!
 
 int main(){
 
