@@ -1,0 +1,178 @@
+%!PS-Adobe-3.0
+% Robert Lawton
+% CS372 Homework 4
+
+%%Pages: 6
+
+%**********************************PAGE 1**************************************%
+%%Page: 1
+%% Draws a one square inch box and inch in from the bottom left
+
+/inch {72 mul} def      % Convert inches->points (1/72 inch)
+
+newpath                 % Start a new path
+1 inch 1 inch moveto    % an inch in from the lower left
+2 inch 1 inch lineto    % bottom side
+2 inch 2 inch lineto    % right side
+1 inch 2 inch lineto    % top side
+
+stroke                  % Draw the box on the paper
+showpage                % We're done... eject the page
+
+%**********************************PAGE 2**************************************%
+%%Page: 2
+
+% Example of rotation... draws 36 lines in a circular pattern
+
+
+0 10 360 {              % Go from 0 to 360 degrees in 10 degree steps
+  dup					% copy of the loop counter
+  /counter exch def 	% store copy of the loop counter
+  newpath               % Start a new path
+
+  gsave                 % Keep rotations temporary
+    250 400 moveto
+    rotate              % Rotate by degrees on stack from 'for'
+    counter 0 rlineto
+    stroke
+  grestore              % Get back the unrotated state
+
+
+} for                   % Iterate over angles
+
+showpage
+
+%**********************************PAGE 3**************************************%
+%%Page: 3
+% Draw a 3x3 array of boxes
+
+/box {
+   newpath
+   moveto
+   72 0 rlineto
+   0 72 rlineto
+   -72 0 rlineto
+   closepath
+} def
+
+0 72 144 { % loop over 3 xcoord origins
+	/xcoord exch def
+	0 72 144 { % loop over 3 ycoord bases
+		/ycoord exch def
+		gsave				% Preserve the old coordinates
+			xcoord ycoord translate		% Set origin to (xcoord, ycoord)
+			0 0 box stroke				% Draw the box at the new origin
+		grestore			% Restore the old coordinates
+	} for
+} for
+showpage
+
+%**********************************PAGE 4**************************************%
+%%Page: 4
+% Demonstrate shading and width in drawing lines and filling shapes
+
+% Define an operator box which builds a path for a one inch square box
+% Note that box does not draw or fill the box.
+
+/box {
+  newpath
+  moveto                                % Current point is on stack
+  0 72 rlineto                          % Left
+  72 0 rlineto                          % Top
+  0 -72 rlineto                         % Right
+  closepath                             % Bottom
+} def
+
+0 setgray                               % 100% black
+1 setlinewidth                          % One point thick lines
+72 72 moveto 72 144 lineto stroke       % Draw a one inch line
+
+gsave                                   % Save a copy of the current settings
+  0.5 setgray                           % 50% black
+  10 setlinewidth                       % 10 point wide lines
+  144 72 moveto 144 144 lineto stroke   % Draw a one inch wide line
+  216 72 box                            % Build a square path...
+  0.35 setgray                          %   make it a little darker...
+  fill                                  %   and fill it.
+grestore                                % Go back to the original settings
+
+0.25 setlinewidth                       % Make the box lines wider
+300 72 box stroke                       % Draw a black box
+
+showpage
+
+%**********************************PAGE 5**************************************%
+%%Page: 5
+% Same as example 4, but last boxx is drawn several times at different rotations
+
+/box {
+  newpath
+  moveto                                % Current point is on stack
+  0 72 rlineto                          % Left
+  72 0 rlineto                          % Top
+  0 -72 rlineto                         % Right
+  closepath                             % Bottom
+} def
+
+0 setgray                               % 100% black
+1 setlinewidth                          % One point thick lines
+72 72 moveto 72 144 lineto stroke       % Draw a one inch line
+
+gsave                                   % Save a copy of the current settings
+  0.5 setgray                           % 50% black
+  10 setlinewidth                       % 10 point wide lines
+  144 72 moveto 144 144 lineto stroke   % Draw a one inch wide line
+  216 72 box                            % Build a square path...
+  0.35 setgray                          %   make it a little darker...
+  fill                                  %   and fill it.
+grestore                                % Go back to the original settings
+
+0.25 setlinewidth                       % Make the box lines wider
+300 72 box stroke                       % Draw a black box
+
+225 250 translate
+
+0 15 90 {
+  newpath
+  gsave
+    rotate
+      0.25 setlinewidth
+      300 72 box stroke
+    stroke
+  grestore
+} for
+
+showpage
+
+
+%**********************************PAGE 6**************************************%
+%%Page: 6
+% My own moderately complex shape that uses circles or circular arcs.
+
+newpath									% Pacman Shape
+144 144 moveto
+144 144 45 30 330 arc closepath
+gsave
+255 255 0 setrgbcolor fill
+grestore
+stroke
+
+newpath									% Pacman Eye
+160 170 moveto
+160 170 5 0 360 arc closepath
+0 0 0 setrgbcolor fill
+
+
+/length {180} def						% Pacman Food Dots
+0 10 100 {
+ newpath
+ length 144 5 0 360 arc closepath
+ gsave
+ 255 255 255 setrgbcolor fill
+ grestore
+ stroke
+ /length length 40 add def
+} for
+
+
+showpage
